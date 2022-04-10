@@ -30,9 +30,31 @@ Dette projekt kræver at følgende pakker installeres: `git nginx nano`. Det kan
 $ sudo dnf -y install git nginx nano
 ```
 
+## Nginx
+Lad os starte med at starte nginx serveren. Meget lidt er klart nu, men det vil være rart at se noget i browseren og få en fornemmelse for, at der sker noget. Så lad os starte for den:
+
+```bash
+$ sudo systemctl enable --now nginx
+```
+
+Du vil nu være i stand til at se din hjemmeside ved at gå til `http://<ip-address>/`. Fantastisk! Dog mangler hængelåsen. Lad os også fikse det, nu mens vi er her. Jeg har brugt Lets Encrypt og deres certbot til at generere certifikaterne. `certbot` kan installeres med
+
+```bash
+$ sudo dnf install epel-release
+$ sudo dnf install certbot python3-certbot-nginx
+```
+
+Genererer certikaterne ved at køre (mere information på [certbot.eff.org](https://certbot.eff.org/instructions?ws=nginx&os=centosrhel8))
+
+```bash
+$ sudo certbot --nginx
+$ sudo certbot renew --dry-run
+```
+
+## Hugo
 Bloggen skrives i .md filer, hvor [Hugo](https://gohugo.io/) bygger hjemmesiden hver gang man pusher en ny fil til ens GitHub repository (i dette tilfælde).
 
-Det betyder, at vi nu skal installere Hugo. Det nemmeste at gøre, hvis man bruger Rocky Linux er at installere snap, og så installere Hugo derfra.
+Det betyder, at vi nu skal installere Hugo. Det nemmeste at gøre, hvis man bruger Rocky Linux er at installere snap, og så installere Hugo derfra. (Du behøver ikke køre den første linje, hvis du gjorde det før).
 
 ```bash
 $ sudo dnf install epel-release
@@ -41,7 +63,7 @@ $ sudo systemctl enable --now snapd.socket
 $ sudo ln -s /var/lib/snapd/snap /snap
 ```
 
-Jeg føler guiden fra [snapcraft.io](https://snapcraft.io/docs/installing-snap-on-rocky) og den anbefaler, at du genstarter serveren eller logger ud?. Du kan genstarte serveren med `sudo reboot` og endelig installere Hugo med:
+Jeg følger guiden fra [snapcraft.io](https://snapcraft.io/docs/installing-snap-on-rocky), og den anbefaler, at du genstarter serveren eller logger ud?. Du kan genstarte serveren med `sudo reboot` og endelig installere Hugo med:
 
 ```bash
 $ snap install hugo
