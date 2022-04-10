@@ -1,5 +1,5 @@
 #!/bin/bash
+cd "$(dirname "$0")"
+git pull
 hugo
-sudo rm -R /usr/share/nginx/blog/*
-sudo cp -R public/* /usr/share/nginx/blog/
-
+rsync -avu --delete public/ /usrshare/nginx/blog
