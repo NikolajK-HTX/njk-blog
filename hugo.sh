@@ -2,4 +2,4 @@
 cd "$(dirname "$0")"
 git pull
 hugo
-rsync -avu --delete public/ /usrshare/nginx/blog
+rsync -avu --delete public/ /usr/share/nginx/blog
