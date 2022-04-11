@@ -8,21 +8,21 @@ Denne post er til for at hjælpe med at sætte sådant et projekt op.
 
 Jeg går ud fra, at man bruger Rocky Linux eller tilsvarende (det kunne f.eks. AlmaLinux, CentOS eller Fedora Server). Det vil dog ikke se voldsomt anderledes ud, hvis man valgte at sætte det op på en anden distro.
 
-Du læser højst sandsynligt dette fra [blog.jehaj.dk](https://blog.jehaj.dk/), som bliver leveret til dig fra en server hos DigitalOcean. Det burde ikke være anderledes at gøre det hos andre tjenester, men hvis du ikke har bestemt dig for en endnu, kan de anbefales. Jeg har i hvert fald ikke haft nogen problemer med dem.
+Du læser højst sandsynligt dette fra [blog.jehaj.dk](https://blog.jehaj.dk/), som bliver leveret til dig fra en server hos DigitalOcean. Det burde ikke være anderledes at gøre det hos andre tjenester, men hvis man ikke har bestemt sig for en endnu, kan DO anbefales. Jeg har i hvert fald ikke haft nogen problemer med dem.
 
 # Sæt igang
-Du kan ikke gå igang før, du har fået adgang til din server. Det gør du med `ssh root@<ip-address>`. I stedet for `<ip-address>` kan du bruge dit domæne, hvis du har sat det til at pege på serveren. DigitalOcean anbefaler man bruger SSH passphrases, så det gør vi.
+Man kan ikke gå igang før, man har fået adgang til din server. Det gøres med `ssh root@<ip-address>`. I stedet for `<ip-address>` kan man bruge dit domæne, hvis man har sat det til at pege på serveren. DigitalOcean anbefaler man bruger SSH passphrases, så det anbefaler jeg også.
 
-(Det er ikke sikkert, at maskinen er helt opdateret... `dnf upgrade`)
+(Det er ikke sikkert, at maskinen er helt opdateret... for en sikkerheds skyld køres `dnf upgrade`)
 
-Dernæst laves en bruger, så vi undgår at være root. Kommandoerne kommer her (antager at brugeren skal hedde `manager`):
+Dernæst laves en bruger, så man undgår at være root. Kommandoerne kommer her (antager at brugeren skal hedde `manager`):
 ```bash
 $ adduser manager
 $ passwd manager
 $ usermod -aG wheel manager
 $ rsync --archive --chown=manager:manager ~/.ssh /home/manager
 ```
-Du kan skifte til den nyoprettede bruger med `su - manager` eller forlade SSH-sessionen og bruge `manager@<ip-address>`.
+Man kan skifte til den nyoprettede bruger med `su - manager` eller forlade SSH-sessionen og bruge `manager@<ip-address>`.
 
 # Pakker
 Dette projekt kræver at følgende pakker installeres: `git nginx nano`. Det kan gøres med
@@ -37,7 +37,7 @@ Lad os starte med at starte nginx serveren. Meget lidt er klart nu, men det vil 
 $ sudo systemctl enable --now nginx
 ```
 
-Du vil nu være i stand til at se din hjemmeside ved at gå til `http://<ip-address>/`. Fantastisk! Dog mangler hængelåsen. Lad os også fikse det, nu mens vi er her. Jeg har brugt Lets Encrypt og deres certbot til at generere certifikaterne. certbot kan installeres med
+Man vil nu være i stand til at se ens hjemmeside ved at gå til `http://<ip-address>/`. Fantastisk! Dog mangler hængelåsen. Lad os også fikse det, nu mens vi er her. Jeg har brugt Lets Encrypt og deres certbot til at generere certifikaterne. certbot kan installeres med
 
 ```bash
 $ sudo dnf install epel-release
@@ -54,7 +54,7 @@ $ sudo certbot renew --dry-run
 ## Hugo
 Bloggen skrives i .md filer, hvor [Hugo](https://gohugo.io/) bygger hjemmesiden hver gang man pusher en ny fil til ens GitHub repository (i dette tilfælde). Andre programmer man kunne bruge, der løser samme problem som Hugo, er bl.a. [Eleventy](https://www.11ty.dev/), [Zola](https://www.getzola.org/) og [Jekyll](https://jekyllrb.com/). Zola ser også lovende ud, men det endte med Hugo i denne omgang.
 
-Det betyder, at vi nu skal installere Hugo. Det nemmeste at gøre, hvis man bruger Rocky Linux er at installere snap, og så installere Hugo derfra. (Du behøver ikke køre den første linje, hvis du gjorde det før).
+Det betyder, at man nu er klar til at gå videre og installere Hugo. Det nemmeste at gøre, hvis man bruger Rocky Linux er at installere snap, og så installere Hugo derfra. (Man behøver ikke køre den første linje, hvis man gjorde det før).
 
 ```bash
 $ sudo dnf install epel-release
@@ -63,7 +63,7 @@ $ sudo systemctl enable --now snapd.socket
 $ sudo ln -s /var/lib/snapd/snap /snap
 ```
 
-Jeg følger guiden fra [snapcraft.io](https://snapcraft.io/docs/installing-snap-on-rocky), og den anbefaler, at du genstarter serveren eller logger ud?. Du kan genstarte serveren med `sudo reboot` og endelig installere Hugo med:
+Jeg følger guiden fra [snapcraft.io](https://snapcraft.io/docs/installing-snap-on-rocky), og den anbefaler, at man genstarter serveren eller logger ud?. Man kan genstarte serveren med `sudo reboot` og endelig installere Hugo med:
 
 ```bash
 $ snap install hugo
@@ -75,7 +75,7 @@ Fedt. Lav en hjemmeside med
 $ hugo new site <sidens navn>
 ```
 
-Giv den et tema du synes om fra [themes.gohugo.io](https://themes.gohugo.io/)
+Man kan finde temaer fra [themes.gohugo.io](https://themes.gohugo.io/). Denne blog bruger `papermod`.
 
 ```bash
 $ cd <sidens navn>
@@ -84,19 +84,19 @@ $ git sobmodule add https://github.com/adityatelange/hugo-PaperMod.git themes/pa
 $ echo theme = \"ananke\" >> config.toml
 ```
 
-I `config.toml` kan du ændre sprog, sidens titel, URL osv. Lav dit første indlæg med
+I `config.toml` kan bl.a. sprog, sidens titel, URL osv ændres. Det første indlæg laves med
 
 ```bash
 $ hugo new posts/my-first-post.md
 ```
 
-Ændrer filen og byg ens blog med
+Ændr filen og giv den indhold. Hjemmesiden bygges med
 
 ```bash
 $ hugo
 ```
 
-Hvis den selv skal opdatere når indholdet ændres kan man bruge
+Hvis den selv skal opdatere, når indholdet ændres, kan man bruge
 
 ```bash
 $ hugo server
