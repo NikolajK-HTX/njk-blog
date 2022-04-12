@@ -4,7 +4,7 @@ date: 2022-04-10T18:39:35Z
 draft: false
 ---
 
-Denne post er til for at hjælpe med at sætte sådant et projekt op.
+Denne post er til for at hjælpe med at sætte sådant et projekt op - nok mest for fremtidige mig.
 
 Jeg går ud fra, at man bruger Rocky Linux eller tilsvarende (det kunne f.eks. AlmaLinux, CentOS eller Fedora Server). Det vil dog ikke se voldsomt anderledes ud, hvis man valgte at sætte det op på en anden distro.
 
@@ -15,23 +15,26 @@ Man kan ikke gå igang før, man har fået adgang til din server. Det gøres med
 
 (Det er ikke sikkert, at maskinen er helt opdateret... for en sikkerheds skyld køres `dnf upgrade`)
 
-Dernæst laves en bruger, så man undgår at være root. Kommandoerne kommer her (antager at brugeren skal hedde `manager`):
+Dernæst laves en bruger, så man undgår at være root. Kommandoerne kommer her (antager at brugeren skal hedde `manager`)
+
 ```bash
 $ adduser manager
 $ passwd manager
 $ usermod -aG wheel manager
 $ rsync --archive --chown=manager:manager ~/.ssh /home/manager
 ```
+
 Man kan skifte til den nyoprettede bruger med `su - manager` eller forlade SSH-sessionen og bruge `manager@<ip-address>`.
 
 # Pakker
 Dette projekt kræver at følgende pakker installeres: `git nginx nano`. Det kan gøres med
+
 ```bash
 $ sudo dnf -y install git nginx nano
 ```
 
 ## Nginx
-Lad os starte med at starte nginx serveren. Meget lidt er klart nu, men det vil være rart at se noget i browseren og få en fornemmelse for, at der sker noget. Så lad os starte for den:
+Lad os begynde med at starte nginx serveren. Man kunne også have brugt [Apache HTTPD](https://httpd.apache.org/), men jeg har lidt erfaring med nginx, da jeg har brugt det før. Meget lidt er klart nu, men det vil være rart at se noget i browseren og få en fornemmelse for, at der sker noget. Så lad os starte for den:
 
 ```bash
 $ sudo systemctl enable --now nginx
@@ -103,3 +106,20 @@ $ hugo server
 ```
 
 Tilføj `-D` til kommandoerne for at indlæg markeret som kladder også inkluderes.
+
+## Automatisk bygning af hjemmeside
+Bloggen kan findes på [GitHub](https://github.com/NikolajK-HTX/njk-blog). Hver gang man pusher et nyt commit til mit GitHub repository, er en Webhook sat op til at sende en POST request til serveren på DO.
+
+Der har jeg en Go-webserver, der lytter bag nginx via reverse proxy, som kører et shell script, som bygger og opdaterer siden.
+
+```bash
+$ #!/bin/bash
+$ cd "$(dirname "$0")"
+$ git pull
+$ hugo
+$ rsync -avu --delete public/ /usr/share/nginx/blog
+```
+
+I stedet for at have en dedikeret webserver til at køre et shell script, burde man bruge [CGI](https://en.wikipedia.org/wiki/Common_Gateway_Interface). Problemet er bare, at det understøtter "standard" nginx ikke (men det gør Apache HTTPD). Nginx har noget andet man kan bruge: [FastCGI](https://www.nginx.com/resources/wiki/start/topics/examples/fastcgiexample/).
+
+(Fordi Nginx bliver brugt som en reverse proxy til en anden webserver på samme maskine, får man lidt bøvl med SELinux. Som standard har nginx ikke adgang til andre porte end 80 og 443, det ændres med `setsebool -P httpd_can_network_connect 1`.
