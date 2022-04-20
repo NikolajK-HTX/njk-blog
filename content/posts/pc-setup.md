@@ -1,6 +1,6 @@
 ---
 title: "PC Setup"
-date: 2022-04-20T14:24:00Z
+date: 2022-04-20T12:24:00Z
 draft: false
 ---
 
