@@ -2,4 +2,5 @@ baseURL = 'https://blog.jehaj.dk/'
 languageCode = 'da-DK'
 title = 'NJKs blog'
 theme = "papermod"
-env = "production"
+[Params]
+  env = "production"
