@@ -4,4 +4,4 @@ title = 'NJKs blog'
 theme = "papermod"
 [Params]
   env = 'production'
-  ShowToc = 'true'
+  ShowReadingTime = true
