@@ -2,3 +2,12 @@ baseURL = 'https://blog.jehaj.dk/'
 languageCode = 'da-DK'
 title = 'NJKs blog'
 theme = "papermod"
+[Params]
+  env = 'production'
+  title = 'NJKs blog'
+  description = "Dette er min blok med indslag fra min hverdag med computere."
+  keywords = ["Blog", "PaperMod", "Computer"]
+  author = 'NJK'
+  ShowReadingTime = true
+  ShowCodeCopyButtons = true
+  showtoc = true
