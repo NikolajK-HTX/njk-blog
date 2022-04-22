@@ -40,7 +40,11 @@ Lad os begynde med at starte nginx serveren. Man kunne også have brugt [Apache 
 $ sudo systemctl enable --now nginx
 ```
 
-Man vil nu være i stand til at se ens hjemmeside ved at gå til `http://<ip-address>/`. Fantastisk! Dog mangler hængelåsen. Lad os også fikse det, nu mens vi er her. Jeg har brugt Lets Encrypt og deres certbot til at generere certifikaterne. certbot kan installeres med
+Man vil nu være i stand til at se ens hjemmeside ved at gå til `http://<ip-address>/`. Fantastisk! Dog mangler hængelåsen. Lad os også fikse det, nu mens vi er her. 
+
+### Certbot
+
+Jeg har brugt Lets Encrypt og deres certbot til at generere certifikaterne. certbot kan installeres med
 
 ```bash
 $ sudo dnf install epel-release
@@ -107,7 +111,7 @@ $ hugo server
 
 Tilføj `-D` til kommandoerne for at indlæg markeret som kladder også inkluderes.
 
-## Automatisk bygning af hjemmeside
+# Automatisk bygning af hjemmeside
 Bloggen kan findes på [GitHub](https://github.com/NikolajK-HTX/njk-blog). Hver gang man pusher et nyt commit til mit GitHub repository, er en Webhook sat op til at sende en POST request til serveren på DO.
 
 Der har jeg en Go-webserver, der lytter bag nginx via reverse proxy, som kører et shell script, som bygger og opdaterer siden.
